@@ -201,7 +201,8 @@ class mixingPopulationBalance
         //- Calculate explicit source terms with realizable ODE solver
         void explicitMomentSource
         (
-            univariateQuadratureApproximation& quadrature
+            univariateQuadratureApproximation& quadrature,
+            const label environment
         );
 
         //- Calculate moments of the PBE in each environment
@@ -215,7 +216,8 @@ class mixingPopulationBalance
         (
             const label momentOrder,
             const label celli,
-            const Foam::mappedPtrList<volScalarNode>& nodes
+            const Foam::mappedPtrList<volScalarNode>& nodes,
+            const label environment
         );
 
         //- Calculate Breakup source term
@@ -223,7 +225,8 @@ class mixingPopulationBalance
         (
             const label momentOrder,
             const label celli,
-            const Foam::mappedPtrList<volScalarNode>& nodes
+            const Foam::mappedPtrList<volScalarNode>& nodes,
+            const label environment
         );
 
         //- Diffusion term
@@ -237,7 +240,8 @@ class mixingPopulationBalance
         (
             const label momentOrder,
             const label celli,
-            const Foam::mappedPtrList<volScalarNode>& nodes
+            const Foam::mappedPtrList<volScalarNode>& nodes,
+            const label environment
         );
 
         //- Calculate source term for moment equation in the specified cell
@@ -245,7 +249,8 @@ class mixingPopulationBalance
         (
             label momentOrder,
             label celli,
-            const Foam::mappedPtrList<volScalarNode>& nodes
+            const Foam::mappedPtrList<volScalarNode>& nodes,
+            const label environment
         );
 
 

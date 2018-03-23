@@ -87,9 +87,6 @@ class ChengVigilFoxFNP
         //- Quadrature approximation of the mixing model
         const univariateQuadratureApproximation& mixingQuadrature_;
 
-        //- Mixture fraction field
-        const volScalarField& mixtureFraction_;
-
         //- Molar mass
         dimensionedScalar molarMass_;
 
@@ -132,7 +129,8 @@ public:
         (
             const scalar& abscissa1,
             const scalar& abscissa2,
-            const label celli
+            const label celli,
+            const label environment = 0
         ) const;
 
 };

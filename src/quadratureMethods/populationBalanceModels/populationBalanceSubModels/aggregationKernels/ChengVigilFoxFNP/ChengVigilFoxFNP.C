@@ -77,10 +77,6 @@ Foam::populationBalanceSubModels::aggregationKernels::ChengVigilFoxFNP
             "quadratureProperties.mixing"
         )
     ),
-    mixtureFraction_
-    (
-        mixingQuadrature_.moments()[1]
-    ),
     molarMass_
     (
         dict.lookup("molarMass")
@@ -118,18 +114,33 @@ Foam::populationBalanceSubModels::aggregationKernels::ChengVigilFoxFNP::Ka
 (
     const scalar& abscissa1,
     const scalar& abscissa2,
-    const label celli
+    const label celli,
+    const label environment
 ) const
 {
+    if (environment != 1 || environment != 2)
+    {
+        FatalErrorInFunction
+            << "The number of the environment can be 1 or 2."
+            << abort(FatalError);
+    }
+
+    scalar environmentWeight
+        = mixingQuadrature_.nodes()[environment - 1].primaryWeight()[celli];
+
+    scalar mixtureFraction
+        = pos(environmentWeight - SMALL)
+         *mixingQuadrature_.nodes()[environment - 1].primaryAbscissa()[celli];
+
     // Calculate molar fraction
     scalar xa =
-        (mixtureFraction_[celli]/molarVol1_.value())
-       /(mixtureFraction_[celli]/molarVol1_.value()
-      + (1.0 - mixtureFraction_[celli])/molarVol2_.value());
+        (mixtureFraction/molarVol1_.value())
+       /(mixtureFraction/molarVol1_.value()
+      + (1.0 - mixtureFraction)/molarVol2_.value());
 
     // Local solute concentration, kmol/m3 -- InSoluteConc, mg/mL
     scalar cpcl =
-        soluteConc_.value()*mixtureFraction_[celli]/molarMass_.value();
+        soluteConc_.value()*mixtureFraction/molarMass_.value();
 
     // Equilibrium solute concentration, kmol/m3
     scalar ceq = 1200*exp(-14.533*(1 - xa))/molarMass_.value();
@@ -151,7 +162,7 @@ Foam::populationBalanceSubModels::aggregationKernels::ChengVigilFoxFNP::Ka
          2.0*Foam::constant::physicoChemical::k.value()
         *T_[celli]*sqr(sqrt1 + sqrt2)/max(3.0*mu_[celli]*sqrt1*sqrt2, SMALL);
 
-    //Turbulent kernel
+    // Turbulent kernel
     scalar betaTurb =
         1.2944*sqrt(epsilon_[celli]*rho_[celli]/mu_[celli])
        *pow3((1.0e-9)*(sqrt1 + sqrt2));
