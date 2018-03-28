@@ -118,7 +118,7 @@ Foam::populationBalanceSubModels::aggregationKernels::ChengVigilFoxFNP::Ka
     const label environment
 ) const
 {
-    if (environment != 1 || environment != 2)
+    if (environment != 1 && environment != 2)
     {
         FatalErrorInFunction
             << "The number of the environment can be 1 or 2."
