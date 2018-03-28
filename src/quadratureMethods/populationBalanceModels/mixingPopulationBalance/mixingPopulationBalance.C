@@ -291,8 +291,6 @@ void Foam::PDFTransportModels::populationBalanceModels::mixingPopulationBalance
 
         scalarList momentsSecondStep(nMoments, 0.0);
 
-        bool nullSource = false;
-
         while (!timeComplete)
         {
             do
@@ -307,13 +305,6 @@ void Foam::PDFTransportModels::populationBalanceModels::mixingPopulationBalance
                           );
 
                     moments[mi][celli] = oldMoments[mi] + k1[mi];
-
-                    nullSource = (mag(k1[mi]) < SMALL) || nullSource;
-                }
-
-                if (nullSource)
-                {
-                    return;
                 }
 
                 realizableUpdate1 =
